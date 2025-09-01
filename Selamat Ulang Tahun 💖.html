@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<!-- saved from url=(0062)file:///D:/PRIBADI/Selamat%20Ulang%20Tahun%20%F0%9F%92%96.html -->
+<html lang="id"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Ulang Tahun 💖</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+        background: linear-gradient(135deg, #ff9ec7, #ff4d8d);
+        color: white;
+        text-align: center;
+      }
+      .card {
+        max-width: 90%;
+        padding: 20px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(6px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        z-index: 10;
+        position: relative;
+        margin-bottom: 20px;
+      }
+      h1 {
+        font-size: clamp(24px, 6vw, 40px);
+        margin: 10px 0;
+      }
+      p {
+        font-size: clamp(14px, 4vw, 18px);
+        margin: 8px 0 20px;
+      }
+      .foto {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 15px;
+        border: 3px solid #fff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 5;
+      }
+      button#btnLanjut {
+        background-color: #ff4d8d;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 12px;
+        color: white;
+        font-size: clamp(14px, 4vw, 18px);
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(255, 77, 141, 0.6);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        margin-top: 10px;
+      }
+      button#btnLanjut:hover {
+        background-color: #ff2a6a;
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="hearts" width="1536" height="730"></canvas>
+
+    <div class="card">
+      <img src="./Selamat Ulang Tahun 💖_files/riska.jpeg" alt="Foto Ulang Tahun" class="foto">
+      <h1>Selamat Ulang Tahun, <span id="nama">Riskaa</span>! 💝</h1>
+      <p id="pesan">Semoga semua doa baikmu terkabul.</p>
+      <button id="btnLanjut">Lanjut</button>
+    </div>
+
+    <script>
+      const CONFIG = {
+        nama: "Riskaa",
+        pesan: "Semoga semua doa baikmu terkabul.",
+        jumlahAwal: 40,
+      };
+      document.getElementById("nama").textContent = CONFIG.nama;
+      document.getElementById("pesan").textContent = CONFIG.pesan;
+
+      const canvas = document.getElementById("hearts");
+      const ctx = canvas.getContext("2d");
+      let W = (canvas.width = window.innerWidth);
+      let H = (canvas.height = window.innerHeight);
+
+      window.addEventListener("resize", () => {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      });
+
+      const fotoList = [
+        "riska.jpeg",
+        "riska2.jpeg",
+        "riska3.jpeg",
+        "riska4.jpeg",
+      ];
+      let fotoImages = [];
+      fotoList.forEach((src) => {
+        let img = new Image();
+        img.src = src;
+        fotoImages.push(img);
+      });
+
+      function drawHeart(x, y, size, img) {
+        ctx.save();
+        ctx.beginPath();
+        for (let t = 0; t < Math.PI * 2; t += 0.01) {
+          let sx = 16 * Math.pow(Math.sin(t), 3);
+          let sy = -(
+            13 * Math.cos(t) -
+            5 * Math.cos(2 * t) -
+            2 * Math.cos(3 * t) -
+            Math.cos(4 * t)
+          );
+          ctx.lineTo(x + sx * size, y + sy * size);
+        }
+        ctx.closePath();
+        ctx.clip();
+        ctx.drawImage(img, x - size * 20, y - size * 20, size * 40, size * 40);
+        ctx.restore();
+      }
+
+      class Heart {
+        constructor() {
+          this.reset();
+          this.img = fotoImages[Math.floor(Math.random() * fotoImages.length)];
+        }
+        reset() {
+          this.x = Math.random() * W;
+          this.y = H + 20;
+          this.size = 0.3 + Math.random() * 0.1;
+          this.vy = 0.8 + Math.random() * 1.2;
+        }
+        update() {
+          this.y -= this.vy;
+          if (this.y < -20) this.reset();
+        }
+        render() {
+          drawHeart(this.x, this.y, this.size * 7, this.img);
+        }
+      }
+
+      const hearts = Array.from(
+        { length: CONFIG.jumlahAwal },
+        () => new Heart()
+      );
+      function loop() {
+        ctx.clearRect(0, 0, W, H);
+        hearts.forEach((h) => {
+          h.update();
+          h.render();
+        });
+        requestAnimationFrame(loop);
+      }
+      requestAnimationFrame(loop);
+
+      // Event listener tombol Lanjut
+      document.getElementById("btnLanjut").addEventListener("click", () => {
+        alert(
+          "✨🎀 Selamat ulang tahun yayannn! 🎀✨Hari ini adalah hari spesialmu, hari di mana kamu dilahirkan. Semoga setiap detik di hari ulang tahunmu dipenuhi tawa, senyum manis, dan momen-momen yang membuat hatimu berbunga-bunga. 🌸💖Semoga kamu selalu sehat, cantikkkkkkk, dan dikelilingi oleh orang-orang yang menyayangimu. 🌈✨Terima kasih telah menjadi sosok yang lembut, hangat, dan juga terimaksiiii karena telah membuat hari hari yaang membosankan ini menjadi berwarna walau kadang ngeselin. Semoga tahun ini membawa petualangan seru, kejutan manis, dan kenangan yang selalu membuatmu tersenyum. 🎁💐🎉Ingat selalu, kamu unik, berharga, dan setiap langkahmu adalah inspirasi bagi banyak orang. 🌟Selamat ulang tahunnnnn🦋💝🥳!"
+        );
+        // Ganti fungsi ini sesuai kebutuhan, misal navigasi halaman lain
+      });
+    </script>
+  
+
+</body></html>
